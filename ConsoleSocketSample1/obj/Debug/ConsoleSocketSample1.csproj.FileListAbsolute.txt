@@ -1,0 +1,8 @@
+Z:\ConsoleSocketSample1\ConsoleSocketSample1\bin\Debug\ConsoleSocketSample1.exe.config
+Z:\ConsoleSocketSample1\ConsoleSocketSample1\bin\Debug\ConsoleSocketSample1.exe
+Z:\ConsoleSocketSample1\ConsoleSocketSample1\bin\Debug\ConsoleSocketSample1.pdb
+Z:\ConsoleSocketSample1\ConsoleSocketSample1\obj\Debug\ConsoleSocketSample1.csproj.AssemblyReference.cache
+Z:\ConsoleSocketSample1\ConsoleSocketSample1\obj\Debug\ConsoleSocketSample1.csproj.SuggestedBindingRedirects.cache
+Z:\ConsoleSocketSample1\ConsoleSocketSample1\obj\Debug\ConsoleSocketSample1.csproj.CoreCompileInputs.cache
+Z:\ConsoleSocketSample1\ConsoleSocketSample1\obj\Debug\ConsoleSocketSample1.exe
+Z:\ConsoleSocketSample1\ConsoleSocketSample1\obj\Debug\ConsoleSocketSample1.pdb
