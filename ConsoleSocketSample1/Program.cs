@@ -1,4 +1,4 @@
-﻿/// <summary>
+/// <summary>
 /// @file Program.cs
 /// @brief Main
 /// @author Oku, IMAGENICS Co.,Ltd.
@@ -13,14 +13,17 @@ using System.Threading.Tasks;
 namespace ConsoleSocketSample1
 {
 	/// <summary>
-	/// Constants
+	/// @brief Constants
+	/// details
 	/// </summary>
 	public partial class Constants
 	{
-		public const string CN_AST_MSGS = "Enter C(=Continue) or F(=Freeze) or I(=Get Information), press CTRL+Z to exit and Return:";
+		public const string CN_AST_MSGS = "Enter '1 to 8' or , press 'CTRL+Z' to exit and Return:\n>";
 
-		public const string RS_TGT_IPAD = "192.168.2.221";
+		public const string RS_TGT_IPAD = "192.168.2.254";
 		public const int RS_TGT_PRTN = 1300;
+		public const int CHECK_TIMEOUT = 1500;
+		public const int SOCK_TIMEOUT = 5000;
 
 		public const string RS_CMD_GTST = "#$01rA00000";
 		public const string RS_CMD_GTOD = "#$01oD00000";
@@ -29,6 +32,23 @@ namespace ConsoleSocketSample1
 		public const string RS_CMD_GTOG = "#$01oG00000";
 		public const string RS_CMD_FZON = "#$01Ob+0001";
 		public const string RS_CMD_FZOF = "#$01Ob00000";
+
+		public const string SW_CMD_GTST = "#rA00000";
+
+		public const string SW_CMD_SELECT_1_1 = "1,1";
+		public const string SW_CMD_SELECT_2_1 = "2,1";
+		public const string SW_CMD_SELECT_3_1 = "3,1";
+		public const string SW_CMD_SELECT_4_1 = "4,1";
+		public const string SW_CMD_SELECT_0_1 = "q,1";
+
+		public const string SW_CMD_SELECT_1_2 = "1,2";
+		public const string SW_CMD_SELECT_2_2 = "2,2";
+		public const string SW_CMD_SELECT_3_2 = "3,2";
+		public const string SW_CMD_SELECT_4_2 = "4,2";
+		public const string SW_CMD_SELECT_0_2 = "q,2";
+
+		public const string SW_CMD_W = "w";
+
 	}
 
 	/// <summary>
@@ -37,55 +57,135 @@ namespace ConsoleSocketSample1
 	/// </summary>
 	internal class Program
 	{
+
 		/// <summary>
-		/// @fn static void Main(string[] args)
-		/// @brief Main
-		/// @param name="args"
-		/// @return void
-		/// @details
+		/// Main
 		/// </summary>
 		private static void Main(string[] args)
 		{
+		
+			Console.Write("Initialising... ");
+			var adrs = string.Empty;
+			if (args.Length > 0)
+			{
+				Console.WriteLine("Connect to " + args[0].ToString());
+				try
+				{
+					adrs = args[0].ToString();
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine("Bad Parameters in command args. " + ex.ToString());
+				}
+			}
+			else
+			{
+				adrs = Constants.RS_TGT_IPAD;
+			}
+
 			MainTask mainTask = new MainTask();
+			mainTask.DstAdrs = adrs;
+			mainTask.DstPrt = Constants.RS_TGT_PRTN;
 			Program program = new Program();
-			// 情報取得
+			
+			// check socket
 			mainTask.checkSocket();
 #pragma warning disable
-			program.waitAsync("Initialising...");
+			program.waitAsync("...");
 #pragma warning restore
-			// メインループ
+			
+			// main loop
 			string line;
-			Console.WriteLine(Constants.CN_AST_MSGS);
-			Console.WriteLine();
+			Console.Write(Constants.CN_AST_MSGS);
 			do
 			{
 				line = Console.ReadLine();
+				var curretConsoleColor = Console.ForegroundColor;
 				if (line != null)
-					Console.WriteLine(">" + line);
+					Console.ForegroundColor = ConsoleColor.Green;
 				switch (line)
 				{
 					case "C":
 					case "c":
-						Console.Write("Un-Freeze>");
+						Console.Write("==> " + line + " ");
 						mainTask.controlSocket(Constants.RS_CMD_FZOF);
 						break;
 
 					case "F":
 					case "f":
-						Console.Write("Freeze>");
+						Console.Write("==> " + line + " ");
 						mainTask.controlSocket(Constants.RS_CMD_FZON);
 						break;
 
 					case "I":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_GTST);
+						break;
 					case "i":
-						Console.Write("Information>");
+						Console.Write("==> " + line + " ");
 						mainTask.controlSocket(Constants.RS_CMD_GTST);
 						break;
 
+					case "1":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_SELECT_1_1);
+						break;
+
+					case "2":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_SELECT_2_1);
+						break;
+					
+					case "3":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_SELECT_3_1);
+						break;
+					
+					case "4":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_SELECT_4_1);
+						break;
+
+					case "o":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_SELECT_0_1);
+						break;
+
+					case "5":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_SELECT_1_2);
+						break;
+					
+					case "6":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_SELECT_2_2);
+						break;
+					
+					case "7":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_SELECT_3_2);
+						break;
+					
+					case "8":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_SELECT_4_2);
+						break;
+
+					case "O":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_SELECT_0_2);
+						break;
+					
+					case "w":
+						Console.Write("==> " + line + " ");
+						mainTask.controlSocket(Constants.SW_CMD_W);
+						break;
+
 					default:
-						Console.WriteLine("Enter C or F or I! or Wait a second.");
+						Console.Write(Constants.CN_AST_MSGS);
 						break;
 				}
+				Console.ForegroundColor = curretConsoleColor;
 			} while (line != null);
 		}
 
@@ -94,8 +194,6 @@ namespace ConsoleSocketSample1
 		/// <summary>
 		/// 時間待ち
 		/// </summary>
-		/// <param name="message"></param>
-		/// <returns></returns>
 		private async Task<string> waitAsync(string message)
 		{
 			System.Threading.Thread.Sleep(5000);
@@ -105,10 +203,17 @@ namespace ConsoleSocketSample1
 #pragma warning restore
 	}
 
+	/// <summary>
+	/// @brief MainTask
+	/// details
+	/// </summary>
 	public class MainTask
 	{
+		public string DstAdrs { get; set; }
+		public int DstPrt { get; set; }
+
 		/// <summary>
-		/// コンストラクタ
+		/// constructor
 		/// </summary>
 		public MainTask()
 		{
@@ -121,7 +226,6 @@ namespace ConsoleSocketSample1
 		/// <summary>
 		/// Own Instance
 		/// </summary>
-		/// <returns></returns>
 		public static MainTask GetInstance()
 		{
 			return _instance;
@@ -133,7 +237,7 @@ namespace ConsoleSocketSample1
 		/// <summary>
 		/// Create Socket
 		/// </summary>
-		public void CreateSocket()
+		public void CreateSocket(string a, int p)
 		{
 			try
 			{
@@ -141,8 +245,8 @@ namespace ConsoleSocketSample1
 					sock.Disconnect();
 				sock = new Sock(
 				Cb[1],
-				Constants.RS_TGT_IPAD,
-				Constants.RS_TGT_PRTN);
+				DstAdrs,
+				DstPrt);
 			}
 			catch (Exception e)
 			{
@@ -164,7 +268,7 @@ namespace ConsoleSocketSample1
 		};
 
 		/// <summary>
-		/// ベースのコールバック
+		/// base callback
 		/// </summary>
 		/// <param name="s"></param>
 		private void bseCallbacks(string s)
@@ -173,9 +277,8 @@ namespace ConsoleSocketSample1
 		}
 
 		/// <summary>
-		/// ソケットのコールバック
+		/// callback from socket
 		/// </summary>
-		/// <param name="s"></param>
 		private void netCallbacks(string s)
 		{
 			Debug.WriteLine(s);
@@ -183,35 +286,33 @@ namespace ConsoleSocketSample1
 		}
 
 		/// <summary>
-		/// ソケット制御
+		/// control socket
 		/// </summary>
-		/// <param name="s"></param>
 		public void controlSocket(string s)
 		{
 			// TCPソケット生成
 			var cph = s + "\r";
-			CreateSocket();
+			CreateSocket(DstAdrs, DstPrt);
 			if (sock != null)
 				sock.SendText(cph);
 			// ソケットのタイムアウトTASK
 			Task.Run(async () =>
 			{
-				await Task.Delay(1500);
+				await Task.Delay(Constants.SOCK_TIMEOUT);
 				sock.Disconnect();
-				Console.WriteLine(Constants.CN_AST_MSGS);
+				Console.Write(Constants.CN_AST_MSGS);
 			});
 		}
 
 		/// <summary>
-		/// ソケットのチェック
+		/// checke socket
 		/// </summary>
-		/// <returns></returns>
 		public bool checkSocket()
 		{
-			CreateSocket();
+			CreateSocket(DstAdrs, DstPrt);
 			Task.Run(async () =>
 			{
-				await Task.Delay(5000);
+				await Task.Delay(Constants.CHECK_TIMEOUT);
 				sock.Disconnect();
 			});
 			return sock.IsConnected();
